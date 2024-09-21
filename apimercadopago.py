@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 import mercadopago
 
 def gerar_link_pagamento():
-    sdk = mercadopago.SDK("APP_USR-959358377413846-091918-f382a54b75e515fe89c7aea46d38c6c0-1956623115")
+    sdk = mercadopago.SDK("APP_USR-1746040795185388-092019-6d447169a49a891e0dec99d562fb1104-310155133")
 
     payment_data = {
         "items": [
