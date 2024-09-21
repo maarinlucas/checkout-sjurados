@@ -17,8 +17,8 @@ def compra_certa():
 def compra_errada():
     return render_template("compraerrada.html")
 
-if __name__ == "__main__":
+""" if __name__ == "__main__":
     # Obtém a porta fornecida pelo Heroku, ou usa 5000 para rodar localmente
     port = int(os.environ.get("PORT", 5000))
     # Faz a aplicação escutar em todas as interfaces de rede (necessário para Heroku)
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port) """
