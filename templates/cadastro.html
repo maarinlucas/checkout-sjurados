@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Cadastro - $jurados</title>
+
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">$jurados - Cadastro</h1>
+        <input id="name" class="input" type="text" placeholder="Nome" />
+        <input id="email" class="input" type="email" placeholder="E-mail" />
+        <input id="number" class="input" type="text" placeholder="Número de Celular" />
+        <input id="password" class="input" type="password" placeholder="Senha" />
+        <input id="password2" class="input" type="password" placeholder="Repita a Senha" />
+        <button id="registerBtn" class="btn">Cadastrar</button>
+        <p class="copy">© 2024 BatalhaDoS. Todos os direitos reservados.</p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+        import { getAuth } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js';
+        import { getDatabase } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js';
+        import { ref, set, get } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD7NdmsHN_DoQbYG73eSmKZ1z30TzmD8q8",
+            authDomain: "sjurados-7419f.firebaseapp.com",
+            projectId: "sjurados-7419f",
+            storageBucket: "sjurados-7419f.appspot.com",
+            messagingSenderId: "10558815651",
+            appId: "1:10558815651:web:26ac9f7df3ecc3957eae16",
+            measurementId: "G-FWL86VHD3S",
+            databaseURL: "https://sjurados-7419f-default-rtdb.firebaseio.com"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        //////
+
+
+
+        const handleSaveData = async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const password2 = document.getElementById('password2').value;
+            const name = document.getElementById('name').value;
+            const number = document.getElementById('number').value;
+
+            if (password !== password2) {
+                alert("As senhas não coincidem!");
+            } else if (email === "" || name === "" || number === "" || password === "") {
+                alert("Por favor, preencha todos os campos para se registrar!");
+            } else {
+                try {
+
+                    const snapshot = await get(ref(db, "solicitacaoS"));
+
+
+
+
+                    const currentDate = new Date().toLocaleString();
+                    await set(ref(db, "solicitacaoS/"), {
+                        nome: name,
+                        email: email,
+                        celular: number,
+                        senha: password,
+                        dataCadastro: currentDate
+                    });
+
+                    alert("Cadastro realizado com sucesso!");
+                    window.location.replace("/compracerta");
+                } catch (error) {
+                    alert("Erro ao realizar o cadastro: " + error.message);
+                }
+            }
+        };
+
+        
+        document.getElementById('registerBtn').addEventListener("click", handleSaveData);
+    </script>
+
+
+
+</body>
+
+</html>
