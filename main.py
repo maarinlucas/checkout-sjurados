@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template
 from apimercadopago import gerar_link_pagamento
 
@@ -17,4 +18,7 @@ def compra_errada():
     return render_template("compraerrada.html")
 
 if __name__ == "__main__":
-    app.run()
+    # Obtém a porta fornecida pelo Heroku, ou usa 5000 para rodar localmente
+    port = int(os.environ.get("PORT", 5000))
+    # Faz a aplicação escutar em todas as interfaces de rede (necessário para Heroku)
+    app.run(host="0.0.0.0", port=port)
