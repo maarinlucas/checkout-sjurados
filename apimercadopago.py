@@ -8,9 +8,9 @@ def gerar_link_pagamento():
             {"id": "1", "title": "App Sjurados Vitalício", "quantity": 1, "currency_id": "BRL", "unit_price": 1.00}
         ],
         "back_urls": {
-            "success": "http://127.0.0.1:5000/cadastro",
-            "failure": "http://127.0.0.1:5000/compraerrada",
-            "pending": "http://127.0.0.1:5000/compraerrada",
+            "success": "https://nameless-dawn-62388-3d072fabd70a.herokuapp.com/cadastro",
+            "failure": "https://nameless-dawn-62388-3d072fabd70a.herokuapp.com/compraerrada",
+            "pending": "https://nameless-dawn-62388-3d072fabd70a.herokuapp.com/compraerrada",
         },
         "auto_return": "all"
     }
