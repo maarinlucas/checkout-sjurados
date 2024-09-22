@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <title>Cadastro - $jurados</title>
+    <link rel="shortcut icon" href="../static/logo.png" type="image/x-icon">
+    <title>Cadastro</title>
 
 </head>
 
@@ -23,10 +24,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-        import { getAuth } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js';
-        import { getDatabase } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js';
-        import { ref, set, get } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
-
+        import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js';
+        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyD7NdmsHN_DoQbYG73eSmKZ1z30TzmD8q8",
@@ -43,10 +42,6 @@
         const auth = getAuth(app);
         const db = getDatabase(app);
 
-        //////
-
-
-
         const handleSaveData = async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -54,36 +49,67 @@
             const name = document.getElementById('name').value;
             const number = document.getElementById('number').value;
 
+            // Obter identificador único do dispositivo
+            const deviceId = navigator.userAgent;
+
             if (password !== password2) {
                 alert("As senhas não coincidem!");
             } else if (email === "" || name === "" || number === "" || password === "") {
                 alert("Por favor, preencha todos os campos para se registrar!");
             } else {
                 try {
+                    // Verificar se o dispositivo já está cadastrado
+                    const snapshot = await get(child(ref(db), "cadastroS/"));
+                    let deviceRegistered = false;
 
-                    const snapshot = await get(ref(db, "solicitacaoS"));
+                    snapshot.forEach(childSnapshot => {
+                        const userData = childSnapshot.val();
+                        if (userData.deviceId === deviceId) {
+                            deviceRegistered = true;
+                        }
+                    });
 
+                    if (deviceRegistered) {
+                        alert("Você não pode se registrar sem pagar, caso já tenha pago, mande seu comprovante de pagamento e seu email para o email: batalhadoss94@gmail.com");
+                        return;
+                    }
 
-
+                    // Autenticação do usuário
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
 
                     const currentDate = new Date().toLocaleString();
-                    await set(ref(db, "solicitacaoS/"), {
+                    await set(ref(db, "cadastroS/" + user.uid), {
                         nome: name,
                         email: email,
                         celular: number,
-                        senha: password,
-                        dataCadastro: currentDate
+                        senha: password, // Nota: É melhor não armazenar senhas em texto claro
+                        dataCadastro: currentDate,
+                        deviceId: deviceId // Armazena o identificador do dispositivo
                     });
 
-                    alert("Cadastro realizado com sucesso!");
-                    window.location.replace("/compracerta");
+                    await sendEmailVerification(user);
+                    alert("Cadastro realizado com sucesso! Um e-mail de verificação foi enviado para " + email + " Retorne ao Sjurados para logar, caso tenha acontecido algum erro, entrar em contato com o suporte através do email: batalhadoss94@gmail.com .");
+                    window.location.replace("/");
                 } catch (error) {
-                    alert("Erro ao realizar o cadastro: " + error.message);
+                    // Tratamento de erros personalizados
+                    switch (error.code) {
+                        case 'auth/email-already-in-use':
+                            alert("Este e-mail já está em uso. Tente outro.");
+                            break;
+                        case 'auth/invalid-email':
+                            alert("E-mail inválido. Verifique o formato.");
+                            break;
+                        case 'auth/weak-password':
+                            alert("A senha deve ter pelo menos 6 caracteres.");
+                            break;
+                        default:
+                            alert("Erro ao realizar o cadastro: " + error.message);
+                    }
                 }
             }
         };
 
-        
         document.getElementById('registerBtn').addEventListener("click", handleSaveData);
     </script>
 
