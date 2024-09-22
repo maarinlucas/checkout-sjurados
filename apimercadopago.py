@@ -12,9 +12,10 @@ def gerar_link_pagamento():
         ],
         "back_urls": {
             #"success": "https://nameless-dawn-62388-3d072fabd70a.herokuapp.com/checkout_success",
-            "success": "https://nameless-dawn-62388-3d072fabd70a.herokuapp.com/cadastro",
-            "failure": "https://nameless-dawn-62388-3d072fabd70a.herokuapp.com/compraerrada",
-            "pending": "https://nameless-dawn-62388-3d072fabd70a.herokuapp.com/compraerrada",
+            # https://checkout-sjurados.onrender.com
+            "success": "https://checkout-sjurados.onrender.com/cadastro",
+            "failure": "https://checkout-sjurados.onrender.com/compraerrada",
+            "pending": "https://checkout-sjurados.onrender.com/compraerrada",
         },
         "auto_return": "all"
     }
