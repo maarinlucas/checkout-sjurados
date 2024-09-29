@@ -1,8 +1,23 @@
-.container {
-    max-width: 400px;
-    margin: auto;
-    padding: 20px;
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {  
+    padding: 50px;
     text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.container {
+    max-width: 500px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
 }
 
 .title {
