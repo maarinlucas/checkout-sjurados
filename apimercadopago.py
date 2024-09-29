@@ -17,7 +17,7 @@ def gerar_link_pagamento():
             "failure": "https://checkout-sjurados.onrender.com/compraerrada",
             "pending": "https://checkout-sjurados.onrender.com/compraerrada",
         },
-        "auto_return": "approved"
+        "auto_return": "all"
     }
     result = sdk.preference().create(payment_data)
     payment = result["response"]
